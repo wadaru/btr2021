@@ -43,7 +43,9 @@ def findEdge(startAngle, angleStep):
     angle = calcAngle(oldPoint, nowPoint)
     if (oldAngle == -360):
       oldAngle = angle
-    elif (math.fabs(oldAngle - angle) > THRESHOLD_ANGLE):
+    elif (abs(oldAngle - angle) > THRESHOLD_ANGLE):
+      break
+    if (math.isinf(scanDistance(i))):
       break
     i = i + angleStep
     if (i < -90 or i > 90):
