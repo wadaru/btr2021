@@ -34,6 +34,20 @@ def setOdometry(data):
     odometry.pose = pose
     resp = setOdometry(odometry.header, odometry.pose)
 
+def goToPoint(x, y, theta):
+    position = SetPosition()
+    pose = Pose2D()
+    rospy.wait_for_service('/rvw2/positionDriver')
+    setPosition = rospy.ServiceProxy('/rvw2/positionDriver', SetPosition)
+    position.header = Header()
+    pose.x = x
+    pose.y = y
+    pose.theta  = theta
+    position.pose = pose
+    print("send")
+    resp = setPosition(position.header, position.pose)
+    print("goToPoint")
+
 def beaconSignal(data):
     global refboxBeaconSignal
     refboxBeaconSignal = data
@@ -185,7 +199,7 @@ def robotinoVelocity(data):
 #
 if __name__ == '__main__':
   args = sys.argv
-  if (len(args) == 1):
+  if (len(args) >= 2):
     challenge = args[1]
 
   # valiables for refbox
@@ -237,9 +251,14 @@ if __name__ == '__main__':
   pose.theta = 0
   setOdometry(pose)
 
+  print(challenge)
   # while True:
   while not rospy.is_shutdown():
     sendBeacon()
+    print("sendBeacon")
+    if (challenge == "test"):
+        print("goToPoint")
+        goToPoint(100, 0, 0)
 
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):
