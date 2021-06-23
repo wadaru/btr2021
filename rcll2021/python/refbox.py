@@ -6,7 +6,7 @@ import time
 import math
 import sys
 import rospy
-from geometry_msgs.msg import Pose, PoseStamped, Point, Quaternion
+from geometry_msgs.msg import Pose, Pose2D, PoseStamped, Point, Quaternion
 from socket import socket, AF_INET, SOCK_DGRAM
 from std_msgs.msg import Int8, UInt32, String, Float32, Float32MultiArray, \
                          Bool, Header
@@ -23,6 +23,16 @@ from rcll_ros_msgs.msg import BeaconSignal, ExplorationInfo, \
                               ProductColor, RingInfo, Ring, Team, Time
 from rcll_ros_msgs.srv import SendBeaconSignal, SendMachineReport, \
                               SendMachineReportBTR, SendPrepareMachine
+
+def setOdometry(data):
+    odometry = SetOdometry()
+    pose = Pose2D()
+    rospy.wait_for_service('/rvw2/setOdometry')
+    setOdometry = rospy.ServiceProxy('/rvw2/setOdometry', SetOdometry)
+    odometry.header = Header()
+    pose = data
+    odometry.pose = pose
+    resp = setOdometry(odometry.header, odometry.pose)
 
 def beaconSignal(data):
     global refboxBeaconSignal
@@ -220,6 +230,12 @@ if __name__ == '__main__':
 
   machineReport = MachineReportEntryBTR()
   prepareMachine = SendPrepareMachine() 
+
+  pose = Pose2D()
+  pose.x = 0
+  pose.y = 0
+  pose.theta = 0
+  setOdometry(pose)
 
   # while True:
   while not rospy.is_shutdown():
