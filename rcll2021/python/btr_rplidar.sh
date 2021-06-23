@@ -3,19 +3,58 @@
 
 START_ANGLE = -90
 END_ANGLE = 90
+THRESHOLD_ANGLE = 30
+
 import rospy
 import math
 from sensor_msgs.msg import LaserScan
 from geometry_msgs.msg import Point
 from std_msgs.msg import Bool
-from std_srvs.srv import Empty
+from std_srvs.srv import Empty, EmptyResponse
 
 #
 def scanDistance(deg):
   return scanData.ranges[len(scanData.ranges) / 360 * ((deg + 360) % 360)]
 
 #
+def polarToPoint(distance, angle):
+  point = Point()
+  radian = math.radians(angle)
+  point.x = distance * math.cos(radian)
+  point.y = distance * math.sin(radian)
+  point.z = 0
+  return point
+
+#
+def calcAngle(pointA, pointB):
+  point = Point()
+  point.x = pointA.x - pointB.x
+  point.y = pointA.y - pointB.y
+  return math.degrees(math.atan2(point.y, point.x))
+
+#
+def findEdge(startAngle, angleStep):
+  oldPoint = polarToPoint(scanDistance(startAngle - angleStep), startAngle - angleStep)
+  i = startAngle
+  oldAngle = -360
+
+  while True:
+    nowPoint = polarToPoint(scanDistance(i), i)
+    angle = calcAngle(oldPoint, nowPoint)
+    if (oldAngle == -360):
+      oldAngle = angle
+    elif (math.fabs(oldAngle - angle) > THRESHOLD_ANGLE):
+      break
+    i = i + angleStep
+    if (i < -90 or i > 90):
+      break
+  
+  print("findEdge: ", i - angleStep, scanDistance(i - angleStep))
+  return polarToPoint(scanDistance(i - angleStep), i - angleStep)
+
+#
 def calcPoint():
+  global centerPoint, leftPoint, rightPoint
   minDistance = scanDistance(0)
   minAngle = 0
   for i in range(START_ANGLE, END_ANGLE):
@@ -23,6 +62,11 @@ def calcPoint():
       minDistance = scanDistance(i)
       minAngle = i
   print("minAngle:", minAngle, ", minDistance:", minDistance)
+  centerPoint = polarToPoint(minDistance, minAngle)
+
+  # find the left edge and right edge
+  leftPoint = findEdge(minAngle, -1)
+  rightPoint = findEdge(minAngle, 1)
 
 #
 def laserScan(data):
@@ -41,13 +85,12 @@ def laserScan(data):
 def btrScanStart(self):
   global scanFlag
   scanFlag = True
-  return
-
+  return EmptyResponse()
 #
 def btrScanStop(self):
   global scanFlag
   scanFlag = False
-  return
+  return EmptyResponse()
 
 # main
 #
