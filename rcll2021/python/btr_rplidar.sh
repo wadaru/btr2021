@@ -49,7 +49,7 @@ def findEdge(startAngle, angleStep):
     if (i < -90 or i > 90):
       break
   
-  print("findEdge: ", i - angleStep, scanDistance(i - angleStep))
+  # print("findEdge: ", i - angleStep, scanDistance(i - angleStep))
   return polarToPoint(scanDistance(i - angleStep), i - angleStep)
 
 #
@@ -61,7 +61,7 @@ def calcPoint():
     if (minDistance > scanDistance(i)):
       minDistance = scanDistance(i)
       minAngle = i
-  print("minAngle:", minAngle, ", minDistance:", minDistance)
+  # print("minAngle:", minAngle, ", minDistance:", minDistance)
   centerPoint = polarToPoint(minDistance, minAngle)
 
   # find the left edge and right edge
@@ -75,21 +75,23 @@ def laserScan(data):
   # scanNumber = len(scanData.ranges)
   if (scanFlag == True):
     calcPoint()
-  else:
-    print   "0:", scanDistance(  0), \
-           "90:", scanDistance( 90), \
-          "180:", scanDistance(180), \
-          "270:", scanDistance(-90)
+  # else:
+  #   print   "0:", scanDistance(  0), \
+  #          "90:", scanDistance( 90), \
+  #         "180:", scanDistance(180), \
+  #         "270:", scanDistance(-90)
 
 #
 def btrScanStart(self):
   global scanFlag
   scanFlag = True
+  print("start publishing")
   return EmptyResponse()
 #
 def btrScanStop(self):
   global scanFlag
   scanFlag = False
+  print("stop publishing")
   return EmptyResponse()
 
 # main
@@ -113,7 +115,7 @@ if __name__ == '__main__':
   pub03 = rospy.Publisher("/btr/rightPoint", Point, queue_size = 10)
   rate = rospy.Rate(10)
 
-  rospy.spin()
+  # rospy.spin()
 
   scanData = LaserScan
   
@@ -122,5 +124,5 @@ if __name__ == '__main__':
       pub01.publish(centerPoint)
       pub02.publish(leftPoint)
       pub03.publish(rightPoint)
-      rate.sleep()
+    rate.sleep()
 
