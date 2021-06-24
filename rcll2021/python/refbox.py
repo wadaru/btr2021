@@ -277,11 +277,14 @@ if __name__ == '__main__':
   while not rospy.is_shutdown():
     sendBeacon()
     print("sendBeacon")
+    if (challenge == "grasping"):
+        goToMPSCenter()
+
     if (challenge == "test"):
-        moveRobotino(100, 0, 0)
-        print("goToPoint")
-        # goToPoint(100, 0, 0)
-        # goToMPSCenter()
+        # moveRobotino(-100, 0, 0)
+        # print("goToPoint")
+        # goToPoint(1, 0, 0)
+        goToMPSCenter()
 
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):
