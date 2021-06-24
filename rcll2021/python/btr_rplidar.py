@@ -3,7 +3,7 @@
 
 START_ANGLE = -90
 END_ANGLE = 90
-THRESHOLD_ANGLE = 30
+THRESHOLD_ANGLE = 20
 
 import rospy
 import math
@@ -48,7 +48,7 @@ def findEdge(startAngle, angleStep):
     if (math.isinf(scanDistance(i))):
       break
     i = i + angleStep
-    if (i < -90 or i > 90):
+    if (i < -180 or i > 180):
       break
   
   # print("findEdge: ", i - angleStep, scanDistance(i - angleStep))
@@ -67,8 +67,8 @@ def calcPoint():
   centerPoint = polarToPoint(minDistance, minAngle)
 
   # find the left edge and right edge
-  leftPoint = findEdge(minAngle, -1)
-  rightPoint = findEdge(minAngle, 1)
+  leftPoint = findEdge(minAngle - 1, -1)
+  rightPoint = findEdge(minAngle + 1, 1)
 
 #
 def laserScan(data):

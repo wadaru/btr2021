@@ -68,6 +68,18 @@ def goToMPSCenter():
     print("goToMPSCenter")
     resp = goToMPSCenter()
     print("reached")
+
+def turnClockwise():
+    rospy.wait_for_service('/rvw2/turnClockwiseMPS')
+    turnClockwise = rospy.ServiceProxy('/rvw2/turnClockwiseMPS', Empty)
+    print("turnClockwiseMPS")
+    resp = turnClockwise()
+
+def turnCounterClockwise():
+    rospy.wait_for_service('/rvw2/turnCouinterClockwiseMPS')
+    turnCounterClockwise = rospy.ServiceProxy('/rvw2/turnCounterClockwiseMPS', Empty)
+    print("turnCounterClockwiseMPS")
+    resp = turnCounterClockwise()
     
 def beaconSignal(data):
     global refboxBeaconSignal
@@ -284,7 +296,8 @@ if __name__ == '__main__':
         # moveRobotino(-100, 0, 0)
         # print("goToPoint")
         # goToPoint(1, 0, 0)
-        goToMPSCenter()
+        # goToMPSCenter()
+        turnClockwise()
 
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):
