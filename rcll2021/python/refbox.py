@@ -48,6 +48,20 @@ def goToPoint(x, y, theta):
     resp = setPosition(position.header, position.pose)
     print("goToPoint")
 
+def moveRobotino(x, y, theta):
+    position = SetPosition()
+    pose = Pose2D()
+    rospy.wait_for_service('/rvw2/move')
+    setPosition = rospy.ServiceProxy('/rvw2/move', SetPosition)
+    position.header = Header()
+    pose.x = x
+    pose.y = y
+    pose.theta  = theta
+    position.pose = pose
+    print("send")
+    resp = setPosition(position.header, position.pose)
+    print("goToPoint")
+
 def goToMPSCenter():
     rospy.wait_for_service('/rvw2/goToMPSCenter')
     goToMPSCenter = rospy.ServiceProxy('/rvw2/goToMPSCenter', Empty)
@@ -264,9 +278,10 @@ if __name__ == '__main__':
     sendBeacon()
     print("sendBeacon")
     if (challenge == "test"):
+        moveRobotino(100, 0, 0)
         print("goToPoint")
-        goToPoint(100, 0, 0)
-        goToMPSCenter()
+        # goToPoint(100, 0, 0)
+        # goToMPSCenter()
 
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):
