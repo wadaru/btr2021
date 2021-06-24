@@ -10,7 +10,7 @@ from geometry_msgs.msg import Pose, Pose2D, PoseStamped, Point, Quaternion
 from socket import socket, AF_INET, SOCK_DGRAM
 from std_msgs.msg import Int8, UInt32, String, Float32, Float32MultiArray, \
                          Bool, Header
-from std_srvs.srv import SetBool, SetBoolResponse
+from std_srvs.srv import SetBool, SetBoolResponse, Empty, EmptyResponse
 from nav_msgs.msg import Odometry
 import rcll_ros_msgs
 import rcll_btr_msgs
@@ -48,6 +48,13 @@ def goToPoint(x, y, theta):
     resp = setPosition(position.header, position.pose)
     print("goToPoint")
 
+def goToMPSCenter():
+    rospy.wait_for_service('/rvw2/goToMPSCenter')
+    goToMPSCenter = rospy.ServiceProxy('/rvw2/goToMPSCenter', Empty)
+    print("goToMPSCenter")
+    resp = goToMPSCenter()
+    print("reached")
+    
 def beaconSignal(data):
     global refboxBeaconSignal
     refboxBeaconSignal = data
@@ -259,6 +266,7 @@ if __name__ == '__main__':
     if (challenge == "test"):
         print("goToPoint")
         goToPoint(100, 0, 0)
+        goToMPSCenter()
 
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):
