@@ -20,7 +20,8 @@ from rcll_ros_msgs.msg import BeaconSignal, ExplorationInfo, \
                               LightSpec, MachineInfo, Machine, \
                               MachineReportEntry, MachineReportEntryBTR, \
                               MachineReportInfo, OrderInfo, Order, \
-                              ProductColor, RingInfo, Ring, Team, Time
+                              ProductColor, RingInfo, Ring, Team, Time, \
+                              NavigationRoutes, Route
 from rcll_ros_msgs.srv import SendBeaconSignal, SendMachineReport, \
                               SendMachineReportBTR, SendPrepareMachine
 
@@ -123,6 +124,11 @@ def ringInfo(data):
     global refboxRingInfo
     refboxRingInfo = data
     # print("RingInfo: ", data)
+
+def navigationRoutes(data):
+   global refboxNavigationRoutes
+   refboxNavigationRoutes = data
+   # print("NavigaionRoutes: ", data)
 
 #
 # send information to RefBox
@@ -258,6 +264,7 @@ if __name__ == '__main__':
   refboxRing = Ring()
   refboxTeam = Team()
   refboxTime = Time()
+  refboxNavigationRoutes = NavigationRoutes()
 
   btrOdometry = Odometry()
   btrVelocity = Float32MultiArray()
@@ -272,7 +279,7 @@ if __name__ == '__main__':
   rospy.Subscriber("rcll/ring_info", RingInfo, ringInfo)
   rospy.Subscriber("robotino/odometry", Odometry, robotinoOdometry)
   rospy.Subscriber("robotino/getVelocity", Float32MultiArray, robotinoVelocity)
-
+  rospy.Subscriber("rcll/routes_info", NavigationRoutes, navigationRoutes)
   rate = rospy.Rate(10)
 
   machineReport = MachineReportEntryBTR()
@@ -305,7 +312,9 @@ if __name__ == '__main__':
           turnCounterClockwise()
         # finish?
 
-
+    if (challenge == "navigation"):
+        print(refboxNavigationRoutes)
+        print(refboxMachineInfo)
 
     if (challenge == "test"):
         # moveRobotino(-100, 0, 0)
