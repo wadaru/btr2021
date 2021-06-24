@@ -290,7 +290,22 @@ if __name__ == '__main__':
     sendBeacon()
     print("sendBeacon")
     if (challenge == "grasping"):
-        goToMPSCenter()
+        for i in range(3):
+          goToMPSCenter()
+          #
+          # please write here
+          #   to cobotta get the work
+          #
+          turnClockwise()
+          goToMPSCenter()
+          #
+          # please write here
+          #   to cobotta put the work
+          # 
+          turnCounterClockwise()
+        # finish?
+
+
 
     if (challenge == "test"):
         # moveRobotino(-100, 0, 0)
