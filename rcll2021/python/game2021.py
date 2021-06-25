@@ -192,7 +192,6 @@ def sendMachineReport(report):
     try:
         refboxMachineReport = rospy.ServiceProxy('/rcll/send_machine_report', SendMachineReportBTR)
         resp1 = refboxMachineReport(sendReport.team_color, sendReport.machines)
-        # print("sendBeacon: ", beacon.header, beacon.pose)
         # print("resp: ", resp1)
         return resp1
     except rospy.ServiceException, e:
@@ -229,7 +228,11 @@ def sendPrepareMachine(data):
         print "Service call failed: %s"%e
 
 def robotinoOdometry(data):
+    global btrBeaconCounter
     btrOdometry = data
+    btrBeaconCounter +=1
+    if (btrBeaconCounter > 5):
+      sendBeacon()
 
 def robotinoVelocity(data):
     btrVelocity = data
@@ -240,6 +243,10 @@ if __name__ == '__main__':
   args = sys.argv
   if (len(args) >= 2):
     challenge = args[1]
+    if (len(args) >= 3):
+      robotNum = int(args[2])
+    else:
+      robotNum = 1
 
   # valiables for refbox
   refboxBeaconSignal = BeaconSignal()
@@ -267,6 +274,7 @@ if __name__ == '__main__':
   refboxNavigationRoutes = NavigationRoutes()
 
   btrOdometry = Odometry()
+  btrBeaconCounter = 0
   btrVelocity = Float32MultiArray()
 
   rospy.init_node('btr2021')
@@ -286,16 +294,24 @@ if __name__ == '__main__':
   prepareMachine = SendPrepareMachine() 
 
   pose = Pose2D()
-  pose.x = 0
-  pose.y = 0
-  pose.theta = 0
+  pose.x = -1000 * robotNum - 1500
+  pose.y = 500
+  pose.theta = 90
+  if (challenge == "navigation"):
+      startX =     [ -500, -4500, -500]
+      startY =     [  500,  1500, 4500]
+      startTheta = [   90,    90,  180]
+      pose.x = startX[robotNum - 1]
+      pose.y = startY[robotNum - 1]
+      pose.theta = startTheta[robotNum - 1]
+      print(pose.x, pose.y, pose.theta)
   setOdometry(pose)
 
   print(challenge)
   # while True:
   while not rospy.is_shutdown():
-    sendBeacon()
-    print("sendBeacon")
+    # sendBeacon()
+    # print("sendBeacon")
     if (refboxGamePhase == 30 and challenge == "grasping"):
         for i in range(3):
           goToMPSCenter()
@@ -303,13 +319,19 @@ if __name__ == '__main__':
           # please write here
           #   to cobotta get the work
           #
-          turnClockwise()
+          if (robotNum != 2):
+              turnClockwise()
+          else
+              turnCounterClockwise()
           goToMPSCenter()
           #
           # please write here
           #   to cobotta put the work
           # 
-          turnCounterClockwise()
+          if (RobotNum != 2):
+              turnCounterClockwise()
+          else
+              turnClockwise()
         # finish?
 
     if (refboxGamePhase == 30 and challenge == "navigation"):
@@ -322,6 +344,8 @@ if __name__ == '__main__':
         # print("goToPoint")
         # goToPoint(1, 0, 0)
         # goToMPSCenter()
+        while True:
+            goToMPSCenter()
         turnClockwise()
 
     # send machine report for Exploration Phase
