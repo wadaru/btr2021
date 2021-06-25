@@ -17,13 +17,15 @@ import sys
 import rospy
 from geometry_msgs.msg import Pose, Pose2D, PoseStamped, Point, Quaternion
 from socket import socket, AF_INET, SOCK_DGRAM
-from std_msgs.msg import Int8, UInt32, String, Float32, Float32MultiArray, \
+from std_msgs.msg import Int8, Int16, UInt32, String, \
+                         Float32, Float32MultiArray, \
                          Bool, Header
 from std_srvs.srv import SetBool, SetBoolResponse, Empty, EmptyResponse
 from nav_msgs.msg import Odometry
 import rcll_ros_msgs
 import rcll_btr_msgs
-from rcll_btr_msgs.srv import SetOdometry, SetPosition, SetVelocity
+from rcll_btr_msgs.srv import SetOdometry, SetPosition, SetVelocity, \
+                              SetDistance
 from rcll_ros_msgs.msg import BeaconSignal, ExplorationInfo, \
                               ExplorationSignal, ExplorationZone, GameState, \
                               LightSpec, MachineInfo, Machine, \
@@ -72,11 +74,20 @@ def moveRobotino(x, y, theta):
     resp = setPosition(position.header, position.pose)
     print("goToPoint")
 
-def goToMPSCenter():
+def goToInputVelt():
+    goToMPSCenter(350)
+
+def goToOutputVelt():
+    goToMPSCenter(310)
+
+def goToMPSCenter(distance):
+    setDistance = SetDistance()
     rospy.wait_for_service('/rvw2/goToMPSCenter')
-    goToMPSCenter = rospy.ServiceProxy('/rvw2/goToMPSCenter', Empty)
-    print("goToMPSCenter")
-    resp = goToMPSCenter()
+    goToMPSCenter = rospy.ServiceProxy('/rvw2/goToMPSCenter', SetDistance)
+    setDistance.header = Header()
+    setDistance.distance = Int16(distance)
+    print("goToMPSCenter", distance)
+    resp = goToMPSCenter(setDistance.header, setDistance.distance)
     print("reached")
 
 def turnClockwise():
@@ -91,6 +102,18 @@ def turnCounterClockwise():
     print("turnCounterClockwiseMPS")
     resp = turnCounterClockwise()
     
+def getWork():
+    rospy.wait_for_service('/btr/move_g')
+    getWork = rospy.ServiceProxy('/btr/move_g', Empty)
+    print("getWork")
+    resp = getWork()
+
+def putWork():
+    rospy.wait_for_service('btr/move_r')
+    putWork = rospy.SericeProxy('/btr/move_r', Empty)
+    print("putWOrk")
+    resp = putWork()
+
 def beaconSignal(data):
     global refboxBeaconSignal
     refboxBeaconSignal = data
@@ -254,7 +277,7 @@ def robotinoVelocity(data):
 
 def startGrasping():
     for i in range(3):
-        goToMPSCenter()
+        goToInputVelt()
         #
         # please write here
         #   to cobotta get the work
@@ -263,7 +286,7 @@ def startGrasping():
             turnClockwise()
         else:
             turnCounterClockwise()
-        goToMPSCenter()
+        goToMPSOutputVelt()
         #
         # please write here
         #   to cobotta put the work
@@ -449,7 +472,12 @@ if __name__ == '__main__':
         # print("goToPoint")
         # goToPoint(1, 0, 0)
         # goToMPSCenter()
-        goToMPSCenter()
+        goToOutputVelt()
+        getWork()
+        turnClockwise()
+        goToIuputVelt()
+        putWork()
+        turnCounterClockwise()
         challengeFlag = False
 
     # send machine report for Exploration Phase
