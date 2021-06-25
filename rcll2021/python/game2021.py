@@ -354,9 +354,8 @@ if __name__ == '__main__':
         # print("goToPoint")
         # goToPoint(1, 0, 0)
         # goToMPSCenter()
-        while True:
-            goToMPSCenter()
-        turnClockwise()
+        goToMPSCenter()
+        # turnClockwise()
 
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):

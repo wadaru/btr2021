@@ -56,15 +56,17 @@ def findEdge(startAngle, angleStep):
 
 #
 def calcPoint():
-  global centerPoint, leftPoint, rightPoint
+  global centerPoint, closePoint, leftPoint, rightPoint
   minDistance = scanDistance(0)
   minAngle = 0
+  centerPoint = polarToPoint(minDistance, minAngle)
+
   for i in range(START_ANGLE, END_ANGLE):
     if (minDistance > scanDistance(i)):
       minDistance = scanDistance(i)
       minAngle = i
   # print("minAngle:", minAngle, ", minDistance:", minDistance)
-  centerPoint = polarToPoint(minDistance, minAngle)
+  closePoint = polarToPoint(minDistance, minAngle)
 
   # find the left edge and right edge
   leftPoint = findEdge(minAngle - 1, -1)
@@ -112,7 +114,8 @@ if __name__ == '__main__':
   sub01 = rospy.Subscriber("/scan", LaserScan, laserScan)
   srv01 = rospy.Service("/btr/scan_start", Empty, btrScanStart)
   srv02 = rospy.Service("/btr/scan_stop", Empty, btrScanStop)
-  pub01 = rospy.Publisher("/btr/centerPoint", Point, queue_size = 10)
+  pub00 = rospy.Publisher("/btr/centerPoint", Point, quese_size = 10)
+  pub01 = rospy.Publisher("/btr/closePoint", Point, queue_size = 10)
   pub02 = rospy.Publisher("/btr/leftPoint", Point, queue_size = 10)
   pub03 = rospy.Publisher("/btr/rightPoint", Point, queue_size = 10)
   rate = rospy.Rate(10)
@@ -123,7 +126,8 @@ if __name__ == '__main__':
   
   while not rospy.is_shutdown():
     if (scanFlag == True):
-      pub01.publish(centerPoint)
+      pub00.publish(centerPoint)
+      pub01.publish(closePoint)
       pub02.publish(leftPoint)
       pub03.publish(rightPoint)
     rate.sleep()
