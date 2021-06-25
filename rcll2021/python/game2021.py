@@ -168,6 +168,7 @@ def navigationRoutes(data):
 # send information to RefBox
 #
 def sendBeacon():
+    global btrOdometry
     beacon = SendBeaconSignal()
     header1 = Header()
     header2 = Header()
@@ -262,13 +263,14 @@ def sendPrepareMachine(data):
         print "Service call failed: %s"%e
 
 def robotinoOdometry(data):
-    global btrBeaconCounter
+    global btrOdometry, btrBeaconCounter
     btrOdometry = data
     btrBeaconCounter +=1
     if (btrBeaconCounter > 5):
       sendBeacon()
 
 def robotinoVelocity(data):
+    global btrVelocity
     btrVelocity = data
 
 # 
@@ -306,14 +308,14 @@ def setField(x, y, number):
     btrField[y - FIELDMINY][x - FIELDMINX] = number
 
 def getField(x, y):
-    return btrField[y - FIELDMINY][x - FILEDMINX]
+    return btrField[y - FIELDMINY][x - FIELDMINX]
 
 def zoneToPose2D(zone):
     point = Pose2D()
     if zone < 0:        
         zone = zone + 255
-    point.x = zone % 1
-    point.y = (zone % 100) // 10
+    point.y = zone % 10
+    point.x = (zone % 100) // 10
     if (zone > 100):
         point.x = -point.x
     return point
@@ -324,36 +326,48 @@ def setMPStoField():
     for machine in refboxMachineInfo.machines:
         point = zoneToPose2D(machine.zone)
         print(machine.name, point.x, point.y)
-    setField(point.x, point.y, MAXSTEP)
+        setField(point.x, point.y, MAXSTEP)
 
 def getStep(x, y):
+    if ((x < FIELDMINX or FIELDMAXX < x) or (y < FIELDMINY or FIELDMAXY < y)):
+        return 999
+
     step = getField(x, y)
     if (step == 0):
         step = MAXSTEP
     return step
 
 def makeNextPoint(destination):
-    global btrField
+    global btrField, btrOdometry
     tmpField = btrField
-    setField(destination.x, destination.y, 1)
-    for i in range(FILEDSIZE):
+    point = zoneToPose2D(destination)
+    print(destination, point.x, point.y)
+    setField(point.x, point.y, 1)
+    for i in range(FIELDSIZE):
         for x in range(FIELDMINX, FIELDMAXX + 1):
             for y in range(FIELDMINY, FIELDMAXY + 1):
-                if (x == destination.x and y == destination.y):
-                    setField(destination.x, destination.y, 1)
-                else:
+                if (x == point.x and y == point.y):
+                    setField(x, y, 1)
+                elif (getField(x, y) != MAXSTEP):
                     setField(x, y, min(getStep(x - 1, y), getStep(x, y - 1), \
-                                       getSTep(x + 1, y), getStep(x, y + 1)) \
+                                       getStep(x + 1, y), getStep(x, y + 1)) \
                                    + 1)
 
     # get optimized route
-    for y in range(FIELDMINY, FIELDMAXY + 1):
+    for y in range(FIELDMAXY, FIELDMINY  - 1, -1):
         for x in range(FIELDMINX, FIELDMAXX + 1):
-            print getField(x, y), 
+            if (getField(x,y) == MAXSTEP):
+                print "*",
+            else:
+                print getField(x, y), 
         print()
     #
 
+    robot = Pose2D()
+    robot.x = btrOdometry.pose.pose.position.x
+    robot.y = btrOdometry.pose.pose.position.y
 
+    print(robot)
 
 
 def getNextPoint():
@@ -452,8 +466,17 @@ if __name__ == '__main__':
   challengeFlag = True
   # while True:
   while not rospy.is_shutdown():
-    # sendBeacon()
+    sendBeacon()
     # print("sendBeacon")
+
+    if (challenge == "test" and challengeFlag):
+        startGrasping()
+        challengeFlag = False
+
+    if (challenge == "test2"):
+        if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
+            startNavigation()
+
     if (refboxGamePhase == 30 and challenge == "grasping"):
         startGrasping()
 
@@ -461,20 +484,6 @@ if __name__ == '__main__':
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
             startNavigation()
         
-
-    if (challenge == "test" and challengeFlag):
-        # moveRobotino(-100, 0, 0)
-        # print("goToPoint")
-        # goToPoint(1, 0, 0)
-        # goToMPSCenter()
-        goToOutputVelt()
-        getWork()
-        turnClockwise()
-        goToInputVelt()
-        putWork()
-        turnCounterClockwise()
-        challengeFlag = False
-
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):
         if (refboxTime.sec == 10):
