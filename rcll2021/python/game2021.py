@@ -8,6 +8,7 @@ FIELDMAXY =  5
 FIELDSIZEX = (FIELDMAXX - FIELDMINX) + 1
 FIELDSIZEY = (FIELDMAXY - FIELDMINY) + 1
 FIELDSIZE = FIELDSIZEX * FIELDSIZEY
+MAXSTEP = 999
 
 import struct
 import time
@@ -284,26 +285,34 @@ def initField():
     #   (-5 ,1) => (0, 0)
 
 def setField(x, y, number):
-    btrField[y - FILEDMINY][x - FILEDMINX] = number
+    btrField[y - FIELDMINY][x - FIELDMINX] = number
 
 def getField(x, y):
     return btrField[y - FIELDMINY][x - FILEDMINX]
 
+def zoneToPose2D(zone):
+    point = Pose2D()
+    if zone < 0:        
+        zone = zone + 255
+    point.x = zone % 1
+    point.y = (zone % 100) // 10
+    if (zone > 100):
+        point.x = -point.x
+    return point
+
 def setMPStoField():
     global btrField
+    point = Pose2D()
     for machine in refboxMachineInfo.machines:
-        zone = machine.zone
-        if zone < 0:
-            zone = zone + 255
-        x = zone % 10
-        y = (zone % 100) // 10
-        if (zone > 100):
-            x = -x
-        print(machine.name, x, y)
-    setField(x, y, 999)
+        point = zoneToPose2D(machine.zone)
+        print(machine.name, point.x, point.y)
+    setField(point.x, point.y, MAXSTEP)
 
 def getStep(x, y):
     step = getField(x, y)
+    if (step == 0):
+        step = MAXSTEP
+    return step
 
 def makeNextPoint(destination):
     global btrField
@@ -312,8 +321,20 @@ def makeNextPoint(destination):
     for i in range(FILEDSIZE):
         for x in range(FIELDMINX, FIELDMAXX + 1):
             for y in range(FIELDMINY, FIELDMAXY + 1):
-                setField(x, y, min(getStep(x - 1, y), getStep(x, y - 1), \
-                                   getSTep(x + 1, y), getStep(x, y + 1)))
+                if (x == destination.x and y == destination.y):
+                    setField(destination.x, destination.y, 1)
+                else:
+                    setField(x, y, min(getStep(x - 1, y), getStep(x, y - 1), \
+                                       getSTep(x + 1, y), getStep(x, y + 1)) \
+                                   + 1)
+
+    # get optimized route
+    for y in range(FIELDMINY, FIELDMAXY + 1):
+        for x in range(FIELDMINX, FIELDMAXX + 1):
+            print getField(x, y), 
+        print()
+    #
+
 
 
 
@@ -323,6 +344,7 @@ def getNextPoint():
     zone = route[0].zone
 
     print(zone)
+    makeNextPoint(zone)
 
 
 def startNavigation():
