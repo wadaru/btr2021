@@ -386,6 +386,7 @@ if __name__ == '__main__':
   setOdometry(pose)
 
   print(challenge)
+  challengeFlag = True
   # while True:
   while not rospy.is_shutdown():
     # sendBeacon()
@@ -398,13 +399,13 @@ if __name__ == '__main__':
             startNavigation()
         
 
-    if (challenge == "test"):
+    if (challenge == "test" and challengeFlag):
         # moveRobotino(-100, 0, 0)
         # print("goToPoint")
         # goToPoint(1, 0, 0)
         # goToMPSCenter()
         goToMPSCenter()
-        # turnClockwise()
+        challengeFlag = False
 
     # send machine report for Exploration Phase
     if (refboxGamePhase == 20):

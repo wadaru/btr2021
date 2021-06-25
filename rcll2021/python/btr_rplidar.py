@@ -114,7 +114,7 @@ if __name__ == '__main__':
   sub01 = rospy.Subscriber("/scan", LaserScan, laserScan)
   srv01 = rospy.Service("/btr/scan_start", Empty, btrScanStart)
   srv02 = rospy.Service("/btr/scan_stop", Empty, btrScanStop)
-  pub00 = rospy.Publisher("/btr/centerPoint", Point, quese_size = 10)
+  pub00 = rospy.Publisher("/btr/centerPoint", Point, queue_size = 10)
   pub01 = rospy.Publisher("/btr/closePoint", Point, queue_size = 10)
   pub02 = rospy.Publisher("/btr/leftPoint", Point, queue_size = 10)
   pub03 = rospy.Publisher("/btr/rightPoint", Point, queue_size = 10)
