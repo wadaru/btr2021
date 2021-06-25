@@ -237,6 +237,13 @@ def robotinoOdometry(data):
 def robotinoVelocity(data):
     btrVelocity = data
 
+# 
+# challenge program
+#
+def startNavigation():
+  print(refboxNavigationRoutes)
+  print(refboxMachineInfo)
+
 # main
 #
 if __name__ == '__main__':
@@ -297,7 +304,7 @@ if __name__ == '__main__':
   pose.x = -1000 * robotNum - 1500
   pose.y = 500
   pose.theta = 90
-  if (challenge == "navigation"):
+  if (challenge == "grasping"):
       startX =     [ -500, -4500, -500]
       startY =     [  500,  1500, 4500]
       startTheta = [   90,    90,  180]
@@ -321,7 +328,7 @@ if __name__ == '__main__':
           #
           if (robotNum != 2):
               turnClockwise()
-          else
+          else:
               turnCounterClockwise()
           goToMPSCenter()
           #
@@ -330,13 +337,12 @@ if __name__ == '__main__':
           # 
           if (RobotNum != 2):
               turnCounterClockwise()
-          else
+          else:
               turnClockwise()
         # finish?
 
     if (refboxGamePhase == 30 and challenge == "navigation"):
-        print(refboxNavigationRoutes)
-        print(refboxMachineInfo)
+        startNavigation(robotNum)
         
 
     if (challenge == "test"):
