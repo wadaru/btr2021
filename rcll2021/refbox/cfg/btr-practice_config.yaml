@@ -160,7 +160,7 @@ llsfrb:
       protobuf: protobuf
 
   game:
-    teams: [Carologistics,BabyTigers]
+    teams: [Carologistics, BabyTigers]
     crypto-keys:
       Carologistics: randomkey
       BabyTigers: randomkey

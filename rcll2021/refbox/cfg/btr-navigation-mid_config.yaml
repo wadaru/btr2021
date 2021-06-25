@@ -160,7 +160,7 @@ llsfrb:
       protobuf: protobuf
 
   game:
-    teams: [Carologistics,BabyTigers]
+    teams: [Carologistics, BabyTigers]
     crypto-keys:
       Carologistics: randomkey
       BabyTigers: randomkey
@@ -206,7 +206,7 @@ llsfrb:
         ring-colors: [RING_BLUE, RING_YELLOW, RING_ORANGE]
         cap-color: CAP_BLACK
     publish-routes:
-      enable: false
+      enable: true
       num-points: 12
       num-routes: 1
       pause-duration: 5
