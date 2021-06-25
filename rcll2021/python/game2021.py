@@ -109,8 +109,8 @@ def getWork():
 
 def putWork():
     rospy.wait_for_service('btr/move_r')
-    putWork = rospy.SericeProxy('/btr/move_r', Empty)
-    print("putWOrk")
+    putWork = rospy.ServiceProxy('/btr/move_r', Empty)
+    print("putWork")
     resp = putWork()
 
 def beaconSignal(data):
@@ -276,21 +276,16 @@ def robotinoVelocity(data):
 
 def startGrasping():
     for i in range(3):
-        goToInputVelt()
-        #
-        # please write here
-        #   to cobotta get the work
+        goToOutputVelt()
+        getWork()
         #
         if (robotNum != 2):
             turnClockwise()
         else:
             turnCounterClockwise()
-        goToMPSOutputVelt()
-        #
-        # please write here
-        #   to cobotta put the work
-        #
-        if (RobotNum != 2):
+        goToInputVelt()
+        putWork()
+        if (robotNum != 2):
             turnCounterClockwise()
         else:
             turnClockwise()
@@ -453,7 +448,7 @@ if __name__ == '__main__':
         goToOutputVelt()
         getWork()
         turnClockwise()
-        goToIuputVelt()
+        goToInputVelt()
         putWork()
         turnCounterClockwise()
         challengeFlag = False

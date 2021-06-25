@@ -22928,41 +22928,45 @@
               <md:timeslice md:nsec="10000000" md:sec="0"/>
             </md:sfcSimple>
             <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition17"/>
+            <md:sfcSimple md:id="sfcitem_simple_step20" md:name="Step20" md:sdfModel="sdfmodel_goto15cm">
+              <md:timeslice md:nsec="10000000" md:sec="0"/>
+            </md:sfcSimple>
+            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition18"/>
           </md:sfcSequence>
           <md:sfcSequence>
-            <md:sfcTransition md:guard="mode == 4" md:id="sfcitem_transition18"/>
+            <md:sfcTransition md:guard="mode == 4" md:id="sfcitem_transition19"/>
             <md:sfcSimple md:id="sfcitem_simple_step12" md:name="Step12" md:sdfModel="sdfmodel_calctarget2">
               <md:timeslice md:nsec="10000000" md:sec="0"/>
             </md:sfcSimple>
-            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition19"/>
+            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition20"/>
             <md:sfcSimple md:id="sfcitem_simple_step11" md:name="Step11" md:sdfModel="sdfmodel_positiondriver">
               <md:timeslice md:nsec="10000000" md:sec="0"/>
             </md:sfcSimple>
-            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition20"/>
+            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition21"/>
           </md:sfcSequence>
           <md:sfcSequence>
-            <md:sfcTransition md:guard="mode == 11 || mode == 12" md:id="sfcitem_transition21"/>
+            <md:sfcTransition md:guard="mode == 11 || mode == 12" md:id="sfcitem_transition22"/>
             <md:sfcSimple md:id="sfcitem_simple_step17" md:name="Step17" md:sdfModel="sdfmodel_othersideroute">
               <md:timeslice md:nsec="10000000" md:sec="0"/>
             </md:sfcSimple>
-            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition22"/>
+            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition23"/>
             <md:sfcSimple md:id="sfcitem_simple_step18" md:name="Step18" md:sdfModel="sdfmodel_pathdriver">
               <md:timeslice md:nsec="10000000" md:sec="0"/>
             </md:sfcSimple>
-            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition23"/>
+            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition24"/>
             <md:sfcSimple md:id="sfcitem_simple_step19" md:name="Step19" md:sdfModel="sdfmodel_turn2">
               <md:timeslice md:nsec="10000000" md:sec="0"/>
             </md:sfcSimple>
-            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition24"/>
+            <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition25"/>
           </md:sfcSequence>
           <md:sfcSequence>
-            <md:sfcTransition md:guard="mode==255" md:id="sfcitem_transition25"/>
+            <md:sfcTransition md:guard="mode==255" md:id="sfcitem_transition26"/>
           </md:sfcSequence>
         </md:sfcAlternative>
         <md:sfcSimple md:id="sfcitem_simple_step5" md:name="Step5" md:sdfModel="sdfmodel_resp">
           <md:timeslice md:nsec="10000000" md:sec="0"/>
         </md:sfcSimple>
-        <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition26"/>
+        <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition27"/>
         <md:sfcJump md:dest="sfcitem_simple_wait" md:id="sfcitem_jump"/>
       </md:sfcSequence>
     </md:sfc>
@@ -24722,7 +24726,7 @@
         </md:nets>
         <md:texts/>
       </md:sdf>
-      <md:sdf md:active="true" md:sdfmodel="sdfmodel_goto15cm" md:showData="true" md:showToolTips="false" md:tab="10">
+      <md:sdf md:sdfmodel="sdfmodel_goto15cm" md:showData="true" md:showToolTips="false" md:tab="10">
         <md:sdfViewLayout md:data="000000ff00000000fd00000001000000030000000000000000fc0100000003fb0000007c00310036003700330033006100320038003600610063003500380031003100310031006600340033006400310030003700350063006400330033006100370037006100340038006300630034006200360030003400360033003400360032003800370038003100300036003200330037006400650032003300650031020000016b000001400000013e00000143fb0000007e0032003300330062006400630032003800340032006600660034003800300062003400350066003000340061003100650064003300320064003200390063003700380030003600350030003900390032006200650039006100380031003400350064003300320064003600350061003200650033006600350034003300620200000225000001020000013e00000143fb0000007e00630062003400340033006200610034006400650036006300620061003900340065003800380064006500650030003500380036006100640061006100300036003300630033003800320035003300310062006400660031003600660036003400390031006500630036003500650032006500640036003500640035006202000001690000011d0000013e00000143000003ad0000024000000004000000040000000800000008fc00000000"/>
         <md:units>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_power_management284" md:width="-1" md:x="768" md:y="666"/>
@@ -26448,7 +26452,7 @@
       </md:sdf>
     </md:sdfs>
     <md:sfcs>
-      <md:sfc md:sfcmodel="sfcmodel_1"/>
+      <md:sfc md:active="true" md:sfcmodel="sfcmodel_1"/>
     </md:sfcs>
   </md:layout>
 
