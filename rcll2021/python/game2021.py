@@ -240,6 +240,29 @@ def robotinoVelocity(data):
 # 
 # challenge program
 #
+
+def startGrasping():
+    for i in range(3):
+        goToMPSCenter()
+        #
+        # please write here
+        #   to cobotta get the work
+        #
+        if (robotNum != 2):
+            turnClockwise()
+        else:
+            turnCounterClockwise()
+        goToMPSCenter()
+        #
+        # please write here
+        #   to cobotta put the work
+        #
+        if (RobotNum != 2):
+            turnCounterClockwise()
+        else:
+            turnClockwise()
+        # finish?
+
 def startNavigation():
   print(refboxNavigationRoutes)
   print(refboxMachineInfo)
@@ -320,26 +343,7 @@ if __name__ == '__main__':
     # sendBeacon()
     # print("sendBeacon")
     if (refboxGamePhase == 30 and challenge == "grasping"):
-        for i in range(3):
-          goToMPSCenter()
-          #
-          # please write here
-          #   to cobotta get the work
-          #
-          if (robotNum != 2):
-              turnClockwise()
-          else:
-              turnCounterClockwise()
-          goToMPSCenter()
-          #
-          # please write here
-          #   to cobotta put the work
-          # 
-          if (RobotNum != 2):
-              turnCounterClockwise()
-          else:
-              turnClockwise()
-        # finish?
+        startGrasping()
 
     if (refboxGamePhase == 30 and challenge == "navigation"):
         startNavigation(robotNum)
