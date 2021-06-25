@@ -189,7 +189,7 @@ llsfrb:
   challenges:
     # enable: false
     enable: true
-    name: ""
+    name: "BABYTIGERS_NAVIGATION_EASY_1"
     # max is 7 x 8
     field:
       width: 5
@@ -215,7 +215,7 @@ llsfrb:
       pause-duration: 5
 
       # orders are randomized according to the given spec
-    machines: [BS, CS1, RS1, RS2]
+    machines: [BS, CS1]
     machine-setup:
       customize: true
       rs1-colors: [RING_BLUE, RING_YELLOW]
@@ -273,7 +273,7 @@ llsfrb:
       estimate-time: true
 
   webshop:
-    enable: false
+    enable: true
 
   websocket:
     # true if accepting websocket clients, not tcp socket clients
