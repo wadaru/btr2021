@@ -51,8 +51,8 @@
       <md:dynamicInputs/>
       <md:dynamicOutputs/>
       <md:configVarExprs>
-        <md:varExpr md:value="127.0.1.1:12080" md:varname="ipAddress"/>
-        <md:varExpr md:value="127.0.1.1;;127.0.1.1:12081;;127.0.1.1:12080;;127.0.0.1;;127.0.0.1:12080;;localhost:12080;;localhost:8802;;localhost:8801;;localhost;;10.42.0.89;;127.0.0.1:8081;;127.0.0.1:8080;;172.26.1.1" md:varname="ipAddressHistory"/>
+        <md:varExpr md:value="127.0.1.1:12081" md:varname="ipAddress"/>
+        <md:varExpr md:value="127.0.1.1:12081;;127.0.1.1;;127.0.1.1:12080;;127.0.0.1;;127.0.0.1:12080;;localhost:12080;;localhost:8802;;localhost:8801;;localhost;;10.42.0.89;;127.0.0.1:8081;;127.0.0.1:8080;;172.26.1.1" md:varname="ipAddressHistory"/>
         <md:varExpr md:value="0" md:varname="imageServerPort"/>
         <md:varExpr md:value="(320 240)" md:varname="camera0_resolution"/>
         <md:varExpr md:value="(320 240)" md:varname="camera1_resolution"/>
@@ -144,12 +144,28 @@
   </md:device>
 
   <md:utspecs>
-    <md:utspec md:id="rec_gmbh_basic_greater_equal"/>
-    <md:utspec md:id="rec_gmbh_basic_greater"/>
-    <md:utspec md:id="rec_gmbh_basic_equality"/>
-    <md:utspec md:id="rec_gmbh_basic_inequality"/>
+    <md:utspec md:id="rec_gmbh_data_exchange_udp_int_reader"/>
+    <md:utspec md:id="rec_gmbh_data_exchange_udp_int_writer"/>
+    <md:utspec md:id="rec_gmbh_global_variable_reader_float"/>
+    <md:utspec md:id="rec_gmbh_global_variable_writer_float"/>
+    <md:utspec md:id="rec_gmbh_global_variable_reader_pose"/>
+    <md:utspec md:id="rec_gmbh_global_variable_writer_pose"/>
+    <md:utspec md:id="rec_gmbh_vector2f_subtraction"/>
+    <md:utspec md:id="rec_gmbh_vector2f_cartesian2vector"/>
+    <md:utspec md:id="rec_gmbh_vector2f_vector2cartesian"/>
+    <md:utspec md:id="rec_gmbh_vector2f_vector2polar"/>
+    <md:utspec md:id="rec_gmbh_vector2f_rotate"/>
+    <md:utspec md:id="rec_gmbh_robotino_bumper"/>
+    <md:utspec md:id="rec_gmbh_robotino_power_management"/>
+    <md:utspec md:id="rec_gmbh_robotino_motor"/>
+    <md:utspec md:id="rec_gmbh_robotino_omnidrive"/>
+    <md:utspec md:id="rec_gmbh_robotino_odometry"/>
+    <md:utspec md:id="rec_gmbh_robotino_omnidrive_inverse"/>
     <md:utspec md:id="rec_gmbh_basic_absolute_value"/>
-    <md:utspec md:id="rec_gmbh_transferfunction"/>
+    <md:utspec md:id="rec_gmbh_basic_inequality"/>
+    <md:utspec md:id="rec_gmbh_basic_greater"/>
+    <md:utspec md:id="rec_gmbh_basic_greater_equal"/>
+    <md:utspec md:id="rec_gmbh_basic_equality"/>
     <md:utspec md:id="rec_gmbh_constant_int32">
       <md:spec md:curr="int32" md:type="T"/>
     </md:utspec>
@@ -159,40 +175,24 @@
     <md:utspec md:id="rec_gmbh_constant_float">
       <md:spec md:curr="float" md:type="T"/>
     </md:utspec>
-    <md:utspec md:id="rec_gmbh_basic_modulo"/>
-    <md:utspec md:id="rec_gmbh_basic_division"/>
+    <md:utspec md:id="rec_gmbh_transferfunction"/>
     <md:utspec md:id="rec_gmbh_basic_multiplication"/>
     <md:utspec md:id="rec_gmbh_basic_subtraction"/>
     <md:utspec md:id="rec_gmbh_basic_addition"/>
-    <md:utspec md:id="rec_gmbh_robotino_bumper"/>
-    <md:utspec md:id="rec_gmbh_robotino_power_management"/>
-    <md:utspec md:id="rec_gmbh_robotino_motor"/>
-    <md:utspec md:id="rec_gmbh_robotino_omnidrive"/>
-    <md:utspec md:id="rec_gmbh_robotino_odometry"/>
-    <md:utspec md:id="rec_gmbh_robotino_omnidrive_inverse"/>
-    <md:utspec md:id="rec_gmbh_vector2f_subtraction"/>
-    <md:utspec md:id="rec_gmbh_vector2f_cartesian2vector"/>
-    <md:utspec md:id="rec_gmbh_vector2f_vector2cartesian"/>
-    <md:utspec md:id="rec_gmbh_vector2f_vector2polar"/>
-    <md:utspec md:id="rec_gmbh_vector2f_rotate"/>
+    <md:utspec md:id="rec_gmbh_basic_division"/>
+    <md:utspec md:id="rec_gmbh_basic_modulo"/>
     <md:utspec md:id="rec_gmbh_arb_generator"/>
     <md:utspec md:id="rec_gmbh_robotino_timer"/>
-    <md:utspec md:id="rec_gmbh_pose_composer"/>
-    <md:utspec md:id="rec_gmbh_position_driver"/>
-    <md:utspec md:id="rec_gmbh_path_composer"/>
-    <md:utspec md:id="rec_gmbh_path_decomposer"/>
     <md:utspec md:id="rec_gmbh_pose_decomposer"/>
+    <md:utspec md:id="rec_gmbh_path_composer"/>
     <md:utspec md:id="rec_gmbh_path_driver"/>
-    <md:utspec md:id="rec_gmbh_global_variable_reader_float"/>
-    <md:utspec md:id="rec_gmbh_global_variable_writer_float"/>
-    <md:utspec md:id="rec_gmbh_global_variable_reader_pose"/>
-    <md:utspec md:id="rec_gmbh_global_variable_writer_pose"/>
+    <md:utspec md:id="rec_gmbh_pose_composer"/>
+    <md:utspec md:id="rec_gmbh_path_decomposer"/>
+    <md:utspec md:id="rec_gmbh_position_driver"/>
     <md:utspec md:id="rec_gmbh_sample_and_hold_element"/>
     <md:utspec md:id="rec_gmbh_logic_and"/>
     <md:utspec md:id="rec_gmbh_logic_or"/>
     <md:utspec md:id="rec_gmbh_logic_not"/>
-    <md:utspec md:id="rec_gmbh_data_exchange_udp_int_reader"/>
-    <md:utspec md:id="rec_gmbh_data_exchange_udp_int_writer"/>
   </md:utspecs>
 
   <md:sdfs>
@@ -22256,7 +22256,7 @@
             <md:sfcTransition md:guard="checkFlag" md:id="sfcitem_transition17"/>
           </md:sfcSequence>
           <md:sfcSequence>
-            <md:sfcTransition md:guard="false" md:id="sfcitem_transition18"/>
+            <md:sfcTransition md:guard="mode == 4" md:id="sfcitem_transition18"/>
             <md:sfcSimple md:id="sfcitem_simple_step12" md:name="Step12" md:sdfModel="sdfmodel_calctarget2">
               <md:timeslice md:nsec="10000000" md:sec="0"/>
             </md:sfcSimple>
@@ -23076,8 +23076,8 @@
         </md:nets>
         <md:texts/>
       </md:sdf>
-      <md:sdf md:sdfmodel="sdfmodel_calctarget2" md:showData="true" md:showToolTips="false">
-        <md:sdfViewLayout md:data=""/>
+      <md:sdf md:sdfmodel="sdfmodel_calctarget2" md:showData="true" md:showToolTips="false" md:tab="4">
+        <md:sdfViewLayout md:data="000000ff00000000fd0000000000000531000002db00000004000000040000000800000008fc00000000"/>
         <md:units>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_output_0_int065" md:width="-1" md:x="594" md:y="-54"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_constant__4_66" md:width="-1" md:x="318" md:y="-48"/>
@@ -23393,8 +23393,8 @@
         </md:nets>
         <md:texts/>
       </md:sdf>
-      <md:sdf md:sdfmodel="sdfmodel_setodometry" md:showData="false" md:showToolTips="false">
-        <md:sdfViewLayout md:data=""/>
+      <md:sdf md:sdfmodel="sdfmodel_setodometry" md:showData="true" md:showToolTips="false" md:tab="2">
+        <md:sdfViewLayout md:data="000000ff00000000fd0000000000000531000002db00000004000000040000000800000008fc00000000"/>
         <md:units>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_motor__2129" md:width="-1" md:x="306" md:y="378"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_multiplication__6_130" md:width="-1" md:x="570" md:y="414"/>
@@ -23432,7 +23432,7 @@
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_constant__3_159" md:width="-1" md:x="102" md:y="408"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_constant__5_160" md:width="-1" md:x="138" md:y="504"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_constant__6_161" md:width="-1" md:x="546" md:y="-6"/>
-          <md:unit md:height="-1" md:nameDisplay="visible" md:unit="actor_checkflag162" md:width="-1" md:x="168" md:y="162"/>
+          <md:unit md:height="-1" md:nameDisplay="visible" md:unit="actor_checkflag162" md:width="-1" md:x="228" md:y="126"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_equality__1_163" md:width="-1" md:x="120" md:y="126"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_constant__7_164" md:width="-1" md:x="60" md:y="90"/>
         </md:units>
@@ -23722,8 +23722,8 @@
         </md:nets>
         <md:texts/>
       </md:sdf>
-      <md:sdf md:sdfmodel="sdfmodel_wait" md:showData="true" md:showToolTips="false">
-        <md:sdfViewLayout md:data=""/>
+      <md:sdf md:active="true" md:sdfmodel="sdfmodel_wait" md:showData="true" md:showToolTips="false" md:tab="3">
+        <md:sdfViewLayout md:data="000000ff00000000fd0000000000000531000002db00000004000000040000000800000008fc00000000"/>
         <md:units>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_motor__2202" md:width="-1" md:x="306" md:y="378"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_multiplication__6_203" md:width="-1" md:x="570" md:y="414"/>
@@ -25455,8 +25455,8 @@
         </md:nets>
         <md:texts/>
       </md:sdf>
-      <md:sdf md:active="true" md:sdfmodel="sdfmodel_othersideroute" md:showData="false" md:showToolTips="false" md:tab="1">
-        <md:sdfViewLayout md:data="000000ff00000000fd00000001000000030000000000000000fc0100000003fb0000007e0061003000360032003700360064003600320032003400370037003100310037003100630039006600360064006500370031003900630036003300330062003200370030003600610032003000310037003700360036006600620035003400320039006100340038006500300037003100390031003000380034003400350200000204000002010000012a00000090fb0000008000350061003000650065003800360066003400640035003500620063006500310037006400340064006300320032003300360035003700610063003000620065003500330034006200650038006400310033006100360036003700620034003100320039003000380064003000350064003600300038006500610039003400350200000204000002040000012a00000090fb0000007c0037003100380032006100370030003500330037003300350034003200310034003200340035003500610034003900350037006600380063003600630039003400360065006500390039003100380061003700380033003500620062003700640037006600310037006100310063006600380065003600630063003402000000c70000015b0000013e00000143000003ed0000027000000004000000040000000800000008fc00000000"/>
+      <md:sdf md:sdfmodel="sdfmodel_othersideroute" md:showData="false" md:showToolTips="false" md:tab="1">
+        <md:sdfViewLayout md:data="000000ff00000000fd00000001000000030000000000000000fc0100000003fb0000007e0061003000360032003700360064003600320032003400370037003100310037003100630039006600360064006500370031003900630036003300330062003200370030003600610032003000310037003700360036006600620035003400320039006100340038006500300037003100390031003000380034003400350200000204000002010000012a00000090fb0000008000350061003000650065003800360066003400640035003500620063006500310037006400340064006300320032003300360035003700610063003000620065003500330034006200650038006400310033006100360036003700620034003100320039003000380064003000350064003600300038006500610039003400350200000204000002040000012a00000090fb0000007c0037003100380032006100370030003500330037003300350034003200310034003200340035003500610034003900350037006600380063003600630039003400360065006500390039003100380061003700380033003500620062003700640037006600310037006100310063006600380065003600630063003402000000c70000015b0000013e0000014300000531000002db00000004000000040000000800000008fc00000000"/>
         <md:units>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_pose_composer__1_585" md:width="-1" md:x="96" md:y="54"/>
           <md:unit md:height="-1" md:nameDisplay="hidden" md:unit="actor_pose_composer__2_" md:width="-1" md:x="96" md:y="126"/>

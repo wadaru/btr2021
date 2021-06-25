@@ -82,7 +82,7 @@ if __name__ == '__main__':
   # while True:
   while not rospy.is_shutdown():
 
-    if (challenge == "navigation"):
+    if (refboxGamePhase == 30 and challenge == "navigation"):
         if (refboxFlagGetNaviInfo and refboxFlagGetMachineInfo):
           print(refboxNavigationRoutes)
           print(refboxMachineInfo)

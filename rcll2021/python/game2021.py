@@ -296,7 +296,7 @@ if __name__ == '__main__':
   while not rospy.is_shutdown():
     sendBeacon()
     print("sendBeacon")
-    if (challenge == "grasping"):
+    if (refboxGamePhase == 30 and challenge == "grasping"):
         for i in range(3):
           goToMPSCenter()
           #
@@ -312,9 +312,10 @@ if __name__ == '__main__':
           turnCounterClockwise()
         # finish?
 
-    if (challenge == "navigation"):
+    if (refboxGamePhase == 30 and challenge == "navigation"):
         print(refboxNavigationRoutes)
         print(refboxMachineInfo)
+        
 
     if (challenge == "test"):
         # moveRobotino(-100, 0, 0)
