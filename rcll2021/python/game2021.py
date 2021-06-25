@@ -106,8 +106,9 @@ def gameState(data):
     # print("GameState: ", data)
 
 def machineInfo(data):
-    global refboxMachineInfo
+    global refboxMachineInfo, refboxMachineInfoFlag
     refboxMachineInfo = data
+    refboxMachineInfoFlag = True
     # print("MachineInfo: ", data)
 
 def machineReportInfo(data):
@@ -126,8 +127,9 @@ def ringInfo(data):
     # print("RingInfo: ", data)
 
 def navigationRoutes(data):
-   global refboxNavigationRoutes
+   global refboxNavigationRoutes, refboxNavigationRoutesFlag
    refboxNavigationRoutes = data
+   refboxNavigationRoutesFlag = True
    # print("NavigaionRoutes: ", data)
 
 #
@@ -263,9 +265,51 @@ def startGrasping():
             turnClockwise()
         # finish?
 
+def initField():
+    global btrField
+    btrField = [[0 for y in range(5)] for x in range(5)]
+    #
+    # this field is [y][x]
+    # but game field is from -5 to -1
+    # so when you use this variable, please shift argment + 5.
+    #   (-5, 5) => (0, 4)
+    #   (-5 ,1) => (0, 0)
+
+def setField(x, y, number):
+    btrField[y - 1][x + 5] = number
+
+def getField(x, y):
+    return btrField[y - 1][x + 5]
+
+def setMPStoField():
+    global btrField
+    for machine in refboxMachineInfo.machines:
+        zone = machine.zone
+        if zone < 0:
+            zone = zone + 255
+        x = zone % 10
+        y = (zone % 100) // 10
+        if (zone > 100):
+            x = -x
+        print(machine.name, x, y)
+    setField(x, y, 999)
+
+def getNextPoint():
+    point = Pose2D()
+    route = refboxNavigationRoutes.route
+    zone = route[0].zone
+
+    print(zone)
+
+
 def startNavigation():
-  print(refboxNavigationRoutes)
-  print(refboxMachineInfo)
+    global btrField
+    initField()
+    setMPStoField()
+    getNextPoint()
+    # print(refboxNavigationRoutes)
+    # print(refboxMachineInfo)
+
 
 # main
 #
@@ -302,10 +346,14 @@ if __name__ == '__main__':
   refboxTeam = Team()
   refboxTime = Time()
   refboxNavigationRoutes = NavigationRoutes()
+  refboxMachineInfoFlag = False
+  refboxNavigationRoutesFlag = False
 
   btrOdometry = Odometry()
   btrBeaconCounter = 0
   btrVelocity = Float32MultiArray()
+
+  btrField = [[0 for y in range(5)] for x in range(5)]
 
   rospy.init_node('btr2021')
   rospy.Subscriber("rcll/beacon", BeaconSignal, beaconSignal)
@@ -346,7 +394,8 @@ if __name__ == '__main__':
         startGrasping()
 
     if (refboxGamePhase == 30 and challenge == "navigation"):
-        startNavigation()
+        if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
+            startNavigation()
         
 
     if (challenge == "test"):
