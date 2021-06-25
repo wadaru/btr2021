@@ -346,7 +346,7 @@ if __name__ == '__main__':
         startGrasping()
 
     if (refboxGamePhase == 30 and challenge == "navigation"):
-        startNavigation(robotNum)
+        startNavigation()
         
 
     if (challenge == "test"):
