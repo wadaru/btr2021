@@ -1,6 +1,14 @@
 #!/usr/bin/python
 TEAMNAME = "BabyTigers"
 
+FILEDMINX = -5
+FILEDMAXX = -1
+FILEDMINY =  1
+FILEDMAXY =  5
+FIELDSIZEX = (FIELDMAXX - FIELDMINX) + 1
+FIELDSIZEY = (FIELDMAXY - FIELDMINY) + 1
+FIELDSIZE = FIELDSIZEX * FIELDSIZEY
+
 import struct
 import time
 import math
@@ -276,10 +284,10 @@ def initField():
     #   (-5 ,1) => (0, 0)
 
 def setField(x, y, number):
-    btrField[y - 1][x + 5] = number
+    btrField[y - FILEDMINY][x - FILEDMINX] = number
 
 def getField(x, y):
-    return btrField[y - 1][x + 5]
+    return btrField[y - FIELDMINY][x - FILEDMINX]
 
 def setMPStoField():
     global btrField
@@ -294,6 +302,22 @@ def setMPStoField():
         print(machine.name, x, y)
     setField(x, y, 999)
 
+def getStep(x, y):
+    step = getField(x, y)
+    if (
+def makeNextPoint(destination):
+    global btrField
+    tmpField = btrField
+    setField(destination.x, destination.y, 1)
+    for i in range(FILEDSIZE):
+        for x in range(FIELDSIZEMIN, FIELDSIZEMAX + 1):
+            for y in range(FIELDSIZEMIN, FIELDSIZEMAX + 1):
+                setField(x, y, min(getStep(x - 1, y), getStep(x, y - 1), \
+                                   getSTep(x + 1, y), getStep(x, y + 1))
+
+
+
+    set
 def getNextPoint():
     point = Pose2D()
     route = refboxNavigationRoutes.route
