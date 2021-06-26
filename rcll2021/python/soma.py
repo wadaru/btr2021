@@ -59,9 +59,10 @@ def test_move(data):
 
 
 def grab_Arm(data):
-    
+    global gripper_client, gripper_parallel_open, gripper_parallel_close, gripper_parallel_speed, gripper_parallel_effort
     print "cobotta grabbing objects..."
-    
+    print gripper_parallel_open, gripper_parallel_close
+
     move_group.go(joint_first,wait = True)
     gripper_move(gripper_client,gripper_parallel_open,gripper_parallel_speed,gripper_parallel_effort)
     rospy.sleep(5)
@@ -82,8 +83,9 @@ def grab_Arm(data):
 
 
 def release_Arm(data):
-    
+    global gripper_client, gripper_parallel_open, gripper_parallel_close, gripper_parallel_speed, gripper_parallel_effort  
     print "cobotta releacing objects..."
+    print gripper_parallel_open, gripper_parallel_close
     move_group.go(joint_first,wait = True)
     # rospy.sleep(5)
 
@@ -113,7 +115,7 @@ def release_Arm(data):
 # Parallel gripper
 #
 gripper_parallel_open = 0.015
-gripper_parallel_close = 0.0
+gripper_parallel_close = 0.001
 gripper_parallel_speed = 10.0
 gripper_parallel_effort = 10.0
 
