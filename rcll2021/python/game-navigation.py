@@ -96,7 +96,15 @@ def getNextPoint():
     targets = np.array([[0,0]]*12)
     #zone = route[0].zone
     for i in range(12):
-        targets[i] = route[i].zone
+        zone = route[i].zone
+        if zone < 0:
+            zone = zone + 255
+        y = zone % 10
+        x = (zone % 100) // 10
+        xx = x
+        if (zone > 100):
+            x = -x
+        targets[i] = [xx, y]
     #print(zone)
     return targets
 
