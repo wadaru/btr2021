@@ -114,9 +114,9 @@ def release_Arm(data):
 #
 # Parallel gripper
 #
-gripper_parallel_open = 0.015
-gripper_parallel_close = 0.001
-gripper_parallel_speed = 10.0
+gripper_parallel_open   =  0.015
+gripper_parallel_close  =  0.000
+gripper_parallel_speed  = 10.0
 gripper_parallel_effort = 10.0
 
 def gripper_move(gripper_client, width, speed, effort):

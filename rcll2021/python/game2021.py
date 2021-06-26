@@ -75,10 +75,10 @@ def moveRobotino(x, y, theta):
     print("goToPoint")
 
 def goToInputVelt():
-    goToMPSCenter(350)
+    goToMPSCenter(345)
 
 def goToOutputVelt():
-    goToMPSCenter(310)
+    goToMPSCenter(325)
 
 def goToMPSCenter(distance):
     setDistance = SetDistance()
@@ -482,8 +482,9 @@ if __name__ == '__main__':
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
             startNavigation()
 
-    if (refboxGamePhase == 30 and challenge == "grasping"):
+    if (refboxGamePhase == 30 and challenge == "grasping" and challnegeFlag):
         startGrasping()
+        challengeFlag = False
 
     if (refboxGamePhase == 30 and challenge == "navigation"):
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
