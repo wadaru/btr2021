@@ -107,6 +107,7 @@ if __name__ == '__main__':
 
   scanFlag = False
   centerPoint = Point()
+  closePoint = Point()
   leftPoint = Point()
   rightPoint = Point()
 

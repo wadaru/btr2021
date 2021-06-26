@@ -30,6 +30,7 @@ def plan(targets,obstacles):
         t = 0
         s.append(tar[0])
         weight = 99
+        print(tar, obs, tend)
         while (t < (len(tar) - 1)):
             l = len(s) - 1
             Location = copy.copy(s[l])
@@ -139,6 +140,7 @@ def plan(targets,obstacles):
                 break
     indexT.append(len(Route0))
     indexT = sorted(indexT)
+    print("test")
     print(indexT)
     for i in range(13):
         Torder1[i] = Route0[indexT[i]]
