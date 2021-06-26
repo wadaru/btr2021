@@ -16,10 +16,10 @@ import copy
 #    targets[i] = field[i]
 #for i in range(4):
 #    obstacles[i] = field[15-i]
-#print("12 targets are：")
+#print("12 targets are:")
 #print(targets)
 #print('\r')
-#print("4 obstacles are：")
+#print("4 obstacles are:")
 #print(obstacles)
 
 def plan(targets,obstacles):

@@ -80,9 +80,9 @@ def setMPStoField():
         zone = machine.zone
         if zone < 0:
             zone = zone + 255
-        x = zone % 10
+        y = zone % 10
+        x = (zone % 100) // 10
         xx = x
-        y = (zone % 100) // 10
         if (zone > 100):
             x = -x
         print(machine.name, x, y)
@@ -133,14 +133,14 @@ if __name__ == '__main__':
   refboxFlagGetMachineInfo = False
   refboxFlagGetNaviInfo = False
 
-  rospy.init_node('btr2021')
+  rospy.init_node('btr2021Navigation')
   rospy.Subscriber("rcll/game_state", GameState, gameState)
   rospy.Subscriber("rcll/machine_info", MachineInfo, machineInfo)
   rospy.Subscriber("rcll/routes_info", NavigationRoutes, navigationRoutes)
   
-  pub1 = rospy.Publisher("robotino1/route",NavigationRoutes)
-  pub2 = rospy.Publisher("robotino2/route",NavigationRoutes)
-  pub3 = rospy.Publisher("robotino3/route",NavigationRoutes)
+  pub1 = rospy.Publisher("btr/route1",NavigationRoutes, queue_size = 10)
+  pub2 = rospy.Publisher("btr/route2",NavigationRoutes, queue_size = 10)
+  pub3 = rospy.Publisher("btr/route3",NavigationRoutes, queue_size = 10)
   
   rate = rospy.Rate(10)
 
