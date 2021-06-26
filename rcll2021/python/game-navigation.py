@@ -75,7 +75,8 @@ def getField(x, y):
 
 def setMPStoField():
     global btrField
-    obstacles = np.array([[0,0]]*refboxMachineInfo.machines)
+    obstacles = np.array([[0,0]] * len(refboxMachineInfo.machines))
+    i = 0
     for machine in refboxMachineInfo.machines:
         zone = machine.zone
         if zone < 0:
@@ -85,8 +86,10 @@ def setMPStoField():
         xx = x
         if (zone > 100):
             x = -x
-        print(machine.name, x, y)
-        obstacles[machine] = [xx,y]
+        # print(machine.name, x, y)
+        # print(obstacles, machine, xx, y)
+        obstacles[i] = [xx,y]
+        i += 1
     setField(x, y, 999)
     return obstacles
 
@@ -96,7 +99,15 @@ def getNextPoint():
     targets = np.array([[0,0]]*12)
     #zone = route[0].zone
     for i in range(12):
-        targets[i] = route[i].zone
+        zone = route[i].zone
+        if zone < 0:
+            zone = zone + 255
+        y = zone % 10
+        x = (zone % 100) // 10
+        xx = x
+        if (zone > 100):
+            x = -x
+        targets[i] = [xx, y]
     #print(zone)
     return targets
 
@@ -138,12 +149,12 @@ if __name__ == '__main__':
   rospy.Subscriber("rcll/machine_info", MachineInfo, machineInfo)
   rospy.Subscriber("rcll/routes_info", NavigationRoutes, navigationRoutes)
   
-  pub1 = rospy.Publisher("btr/route1",NavigationRoutes, queue_size = 10)
-  pub2 = rospy.Publisher("btr/route2",NavigationRoutes, queue_size = 10)
-  pub3 = rospy.Publisher("btr/route3",NavigationRoutes, queue_size = 10)
+  pub1 = rospy.Publisher("btr/route1", Float32MultiArray, queue_size = 10)
+  pub2 = rospy.Publisher("btr/route2", Float32MultiArray, queue_size = 10)
+  pub3 = rospy.Publisher("btr/route3", Float32MultiArray, queue_size = 10)
   
   rate = rospy.Rate(10)
-
+  RR1 = [0, 0]
   print(challenge)
   # while True:
   while not rospy.is_shutdown():
@@ -154,6 +165,7 @@ if __name__ == '__main__':
           print(refboxMachineInfo)
 
           startNavigation()
+          print(targets)
 
           if (int(args[2]) == 3):
               RR1,RR2,RR3 = ro3.plan(targets,obstacles)
@@ -161,7 +173,7 @@ if __name__ == '__main__':
               pub2.publish(RR2)
               pub3.publish(RR3)
           else:
-              RR1 = ro1.plan(targets,obstacles)
+              RR1 = ro1.plan(targets, obstacles)
               pub1.publish(RR1)
 
     rate.sleep()
