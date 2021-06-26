@@ -25,6 +25,13 @@ from rcll_ros_msgs.msg import BeaconSignal, ExplorationInfo, \
 from rcll_ros_msgs.srv import SendBeaconSignal, SendMachineReport, \
                               SendMachineReportBTR, SendPrepareMachine
 
+#nav_alg
+import numpy as np
+import robot1_route_re as ro1
+#import robot3_route_re as ro3
+import robot3_route_re as ro3
+
+
 def gameState(data):
     global refboxTime, refboxGameState, refboxGamePhase, \
            refboxPointsMagenta, refboxTeamMagenta, \
@@ -49,6 +56,60 @@ def navigationRoutes(data):
    refboxNavigationRoutes = data
    refboxFlagGetNaviInfo = True
    # print("NavigaionRoutes: ", data)
+
+def initField():
+    global btrField
+    btrField = [[0 for y in range(5)] for x in range(5)]
+    #
+    # this field is [y][x]
+    # but game field is from -5 to -1
+    # so when you use this variable, please shift argment + 5.
+    #   (-5, 5) => (0, 4)
+    #   (-5 ,1) => (0, 0)
+
+def setField(x, y, number):
+    btrField[y - 1][x + 5] = number
+
+def getField(x, y):
+    return btrField[y - 1][x + 5]
+
+def setMPStoField():
+    global btrField
+    obstacles = np.array([[0,0]]*refboxMachineInfo.machines)
+    for machine in refboxMachineInfo.machines:
+        zone = machine.zone
+        if zone < 0:
+            zone = zone + 255
+        x = zone % 10
+        xx = x
+        y = (zone % 100) // 10
+        if (zone > 100):
+            x = -x
+        print(machine.name, x, y)
+        obstacles[machine] = [xx,y]
+    setField(x, y, 999)
+    return obstacles
+
+def getNextPoint():
+    point = Pose2D()
+    route = refboxNavigationRoutes.route
+    targets = np.array([[0,0]]*12)
+    #zone = route[0].zone
+    for i in range(12):
+        targets[i] = route[i].zone
+    #print(zone)
+    return targets
+
+
+def startNavigation():
+    global btrField
+    initField()
+    global obstacles,targets
+    obstacles = setMPStoField()
+    targets = getNextPoint()
+    # print(refboxNavigationRoutes)
+    # print(refboxMachineInfo)
+    return()
 
 # main
 #
@@ -76,16 +137,32 @@ if __name__ == '__main__':
   rospy.Subscriber("rcll/game_state", GameState, gameState)
   rospy.Subscriber("rcll/machine_info", MachineInfo, machineInfo)
   rospy.Subscriber("rcll/routes_info", NavigationRoutes, navigationRoutes)
+  
+  pub1 = rospy.Publisher("robotino1/route",NavigationRoutes)
+  pub2 = rospy.Publisher("robotino2/route",NavigationRoutes)
+  pub3 = rospy.Publisher("robotino3/route",NavigationRoutes)
+  
   rate = rospy.Rate(10)
 
   print(challenge)
   # while True:
   while not rospy.is_shutdown():
 
-    if (refboxGamePhase == 30 and challenge == "navigation"):
+    if (challenge == "navigation"):
         if (refboxFlagGetNaviInfo and refboxFlagGetMachineInfo):
           print(refboxNavigationRoutes)
           print(refboxMachineInfo)
+
+          startNavigation()
+
+          if (int(args[2]) == 3):
+              RR1,RR2,RR3 = ro3.plan(targets,obstacles)
+              pub1.publish(RR1)
+              pub2.publish(RR2)
+              pub3.publish(RR3)
+          else:
+              RR1 = ro1.plan(targets,obstacles)
+              pub1.publish(RR1)
 
     rate.sleep()
 
