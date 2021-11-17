@@ -75,10 +75,10 @@ def moveRobotino(x, y, theta):
     print("goToPoint")
 
 def goToInputVelt():
-    goToMPSCenter(350)
+    goToMPSCenter(345)
 
 def goToOutputVelt():
-    goToMPSCenter(310)
+    goToMPSCenter(325)
 
 def goToMPSCenter(distance):
     setDistance = SetDistance()
@@ -97,7 +97,7 @@ def turnClockwise():
     resp = turnClockwise()
 
 def turnCounterClockwise():
-    rospy.wait_for_service('/rvw2/turnCouinterClockwiseMPS')
+    rospy.wait_for_service('/rvw2/turnCounterClockwiseMPS')
     turnCounterClockwise = rospy.ServiceProxy('/rvw2/turnCounterClockwiseMPS', Empty)
     print("turnCounterClockwiseMPS")
     resp = turnCounterClockwise()
@@ -107,12 +107,14 @@ def getWork():
     getWork = rospy.ServiceProxy('/btr/move_g', Empty)
     print("getWork")
     resp = getWork()
+    print("finish")
 
 def putWork():
     rospy.wait_for_service('btr/move_r')
     putWork = rospy.ServiceProxy('/btr/move_r', Empty)
     print("putWork")
     resp = putWork()
+    print("finish")
 
 def beaconSignal(data):
     global refboxBeaconSignal
@@ -278,7 +280,8 @@ def robotinoVelocity(data):
 #
 
 def startGrasping():
-    for i in range(3):
+    for j in range(3):
+        print(j)
         goToOutputVelt()
         getWork()
         #
@@ -288,6 +291,7 @@ def startGrasping():
             turnCounterClockwise()
         goToInputVelt()
         putWork()
+        print("a")
         if (robotNum != 2):
             turnCounterClockwise()
         else:
@@ -467,9 +471,10 @@ if __name__ == '__main__':
   # while True:
   while not rospy.is_shutdown():
     sendBeacon()
-    # print("sendBeacon")
+    print("sendBeacon")
 
     if (challenge == "test" and challengeFlag):
+        print("startGraspingTest")
         startGrasping()
         challengeFlag = False
 
@@ -477,8 +482,9 @@ if __name__ == '__main__':
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
             startNavigation()
 
-    if (refboxGamePhase == 30 and challenge == "grasping"):
+    if (refboxGamePhase == 30 and challenge == "grasping" and challnegeFlag):
         startGrasping()
+        challengeFlag = False
 
     if (refboxGamePhase == 30 and challenge == "navigation"):
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
