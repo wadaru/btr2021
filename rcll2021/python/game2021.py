@@ -482,7 +482,7 @@ if __name__ == '__main__':
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
             startNavigation()
 
-    if (refboxGamePhase == 30 and challenge == "grasping" and challnegeFlag):
+    if (refboxGamePhase == 30 and challenge == "grasping" and challengeFlag):
         startGrasping()
         challengeFlag = False
 
