@@ -75,10 +75,10 @@ def moveRobotino(x, y, theta):
     print("goToPoint")
 
 def goToInputVelt():
-    goToMPSCenter(345)
+    goToMPSCenter(310)
 
 def goToOutputVelt():
-    goToMPSCenter(325)
+    goToMPSCenter(365)
 
 def goToMPSCenter(distance):
     setDistance = SetDistance()
