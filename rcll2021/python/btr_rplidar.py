@@ -14,9 +14,7 @@ from std_srvs.srv import Empty, EmptyResponse
 
 #
 def scanDistance(deg):
-  return scanData.ranges[len(scanData.ranges) / 360 * ((-deg + 360 - 90) % 360)]
-  # -deg means changing the value for RpLidar.
-  # -90  means that we set LRF on the robotino turned at 90 degree.
+  return scanData.ranges[len(scanData.ranges) / 360 * ((deg + 360) % 360)]
 
 #
 def polarToPoint(distance, angle):

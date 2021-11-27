@@ -80,6 +80,12 @@ def goToInputVelt():
 def goToOutputVelt():
     goToMPSCenter(321 - 20)
 
+def goToInputShelf1():
+    goToMPSCenter(235)
+
+def goToRingSlide():
+    goToMPSCenter(65)
+
 def goToMPSCenter(distance):
     setDistance = SetDistance()
     rospy.wait_for_service('/rvw2/goToMPSCenter')
@@ -391,6 +397,24 @@ def startNavigation():
     # print(refboxNavigationRoutes)
     # print(refboxMachineInfo)
 
+def goToMPS(name, side):
+    print(name, side)
+    if (name == "C-CS1" and (side == "INPUT" or side == "SHELF1")):
+        # goTo C-Z22
+        print("test")
+        goToPoint(2000, 2000,  45)
+    if (name == "C-CS1" and side == "OUTPUT"):
+        # goTo C-Z44
+        goToPoint(3000, 3000, 225)
+    if (name == "C-RS1" and side == "SLIDE"):
+        # goTo C-Z13
+        goToPoint( 500, 2500,  90)
+    if (name == "C-BS" and side == "INPUT"):
+        # goTo C-Z57
+        goToPoint(4500, 6500, 180)
+    if (name == "C-DS" and side == "INPUT"):
+        # goTo CZ-72
+        goToPoint(6000, 2000, 315)
 
 # main
 #
@@ -464,6 +488,10 @@ if __name__ == '__main__':
       pose.y = startY[robotNum - 1]
       pose.theta = startTheta[robotNum - 1]
       print(pose.x, pose.y, pose.theta)
+  if (challenge == "tc"):
+    pose.x = 5000
+    pose.y = 500
+    pose.theta = 180
   setOdometry(pose)
 
   print(challenge)
@@ -501,7 +529,7 @@ if __name__ == '__main__':
             sendMachineReport(machineReport)
 
     # send machine prepare command
-    if (refboxGamePhase == 30):
+    if ((challenge == "tc") or (refboxGamePhase == 30 and challenge == "second")):
         # make C0
         # which requires get base with cap from shelf at C-CS1, 
         #                Retrieve cap at C-CS1,
@@ -510,28 +538,71 @@ if __name__ == '__main__':
         #                bring base to C-CS1,
         #                Mount cap at C-CS1,
         #                bring it to C-DS corresponded by order it.
+        
+        # enter the game field from insertion area
+        goToPoint(4500,  500, 90)
+        goToPoint(4500, 1500, 180)
+        goToPoint(2000, 1500, 90)
+        goToMPS("C-CS1", "SHELF1")
+        goToInputShelf1()
+        getWork()
+        # goToMPS("C-CS1", "INPUT")
+        goToInputVelt()
+        putWork()
+        # send message to RefBox
+        prepareMachine.machine = "C-CS1"
+        prepareMachine.cs_operation = 1 # CS_OP_RETRIEVE_CAP
+        prepareMachine.wait = True
+        sendPrepareMachine(prepareMachine)
 
-        if (refboxTime.sec ==   5):
-            prepareMachine.machine = "C-CS1"
-            prepareMachine.cs_operation = 1 # CS_OP_RETRIEVE_CAP
-            prepareMachine.wait = True
-            sendPrepareMachine(prepareMachine)
-        if (refboxTime.sec ==  30):
-            prepareMachine.machine = "C-BS"
-            prepareMachine.bs_side = 1  # INPUT or OUTPUT side
-            prepareMachine.bs_base_color = 1 # BASE COLOR
-            prepareMachine.wait = True
-            sendPrepareMachine(prepareMachine)
-        if (refboxTime.sec ==  60):
-            prepareMachine.machine = "C-CS1"
-            prepareMachine.cs_operation = 0 # CS_OP_MOUNT_CAP
-            prepareMachine.wait = True
-            sendPrepareMachine(prepareMachine)
-        if (refboxTime.sec ==  90):
-            prepareMachine.machine = "C-DS"
-            prepareMachine.ds_order_id = 1 # ORDER ID
-            prepareMachine.wait = True
-            sendPrepareMachine(prepareMachine)
+        # goToMPS("C-CS1", "OUTPUT")
+        turnClockwise()
+        goToOutputVelt()
+        getWork()
+        goToPoint(3000, 3500, 180)
+        goToPoint(1500, 3500, 270)
+        goToPoint(1500, 2500, 180)
+        goToMPS("C-RS1", "SLIDE")
+        goToRingSlide()
+        putWork()
+        # goToMPS("C-BS", "INPUT")
+        # send message to RefBox
+        prepareMachine.machine = "C-BS"
+        prepareMachine.bs_side = 1  # INPUT or OUTPUT side
+        prepareMachine.bs_base_color = 1 # BASE COLOR
+        prepareMachine.wait = True
+        sendPrepareMachine(prepareMachine)
+        goToPoint( 500, 1500,   0)
+        goToPoint(1500, 1500,  90)
+        goToPoint(1500, 6500,   0)
+        goToMPS("C-BS", "OUTPUT")
+        goToOutputVelt()
+        getWork()
+        goToPoint(1500, 6500, 270)
+        goToPoint(1500, 2000,   0)
+        goToMPS("C-CS1", "INPUT")
+        goToInputVelt()
+        putWork()
+        # send message to RefBox
+        prepareMachine.machine = "C-CS1"
+        prepareMachine.cs_operation = 0 # CS_OP_MOUNT_CAP
+        prepareMachine.wait = True
+        sendPrepareMachine(prepareMachine)
+        # goToMPS("C-CS1", "OUTPUT")
+        turnClockwise()
+        goToOutputVelt()
+        getWork()
+        goToPoint(5500, 3000, 270)
+        goToMPS("C-DS", "INPUT")
+        goToInputVelt()
+        putWork()
+        # send message to RefBox
+        prepareMachine.machine = "C-DS"
+        prepareMachine.ds_order_id = 1 # ORDER ID
+        prepareMachine.wait = True
+        sendPrepareMachine(prepareMachine)
+        # finish!
+        goToPoint(4500, 2000, 270)
 
 
     rate.sleep()
