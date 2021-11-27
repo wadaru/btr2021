@@ -102,6 +102,8 @@ def release_Arm(data):
     gripper_move(gripper_client,gripper_parallel_open,gripper_parallel_speed,gripper_parallel_effort)
     rospy.sleep(5)
 
+    move_group.go(joint_grip1,wait = True)
+    # move_group.go(joint_grip2,wait = True)
     move_group.go(joint_top1,wait = True)
     rospy.sleep(1)
     move_group.go(joint_run,wait = True)
