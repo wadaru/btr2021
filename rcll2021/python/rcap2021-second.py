@@ -414,7 +414,7 @@ def goToMPS(name, side):
         goToPoint(4500, 6500, 180)
     if (name == "C-DS" and side == "INPUT"):
         # goTo CZ-72
-        goToPoint(6000, 2000, 315)
+        goToPoint(5500, 2500, 315)
 
 # main
 #
@@ -575,6 +575,7 @@ if __name__ == '__main__':
         goToPoint( 500, 1500,   0)
         goToPoint(1500, 1500,  90)
         goToPoint(1500, 6500,   0)
+        goToPoint(2500, 6500,   0)
         goToMPS("C-BS", "OUTPUT")
         goToOutputVelt()
         getWork()
@@ -592,7 +593,8 @@ if __name__ == '__main__':
         turnClockwise()
         goToOutputVelt()
         getWork()
-        goToPoint(5500, 3000, 270)
+        goToPoint(3500, 3000,   0)
+        goToPoint(5500, 3000, 315)
         goToMPS("C-DS", "INPUT")
         goToInputVelt()
         putWork()
