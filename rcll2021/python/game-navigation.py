@@ -90,7 +90,7 @@ def setMPStoField():
         # print(obstacles, machine, xx, y)
         obstacles[i] = [xx,y]
         i += 1
-    setField(x, y, 999)
+    if (x !=0 and y !=0) :setField(x, y, 999)
     return obstacles
 
 def getNextPoint():
