@@ -479,15 +479,20 @@ if __name__ == '__main__':
         # goToOutputVelt()
         challengeFlag = False
 
-    if (challenge == "test2"):
+    if (challenge == "test2" and challengeFlag):
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
             startNavigation()
+        challengeFlag = False
+
+    if (challenge == "test3" and challengeFlag):
+        goToOutputVelt()
+        challengeFlag = False
 
     if (refboxGamePhase == 30 and challenge == "grasping" and challengeFlag):
         startGrasping()
         challengeFlag = False
 
-    if (refboxGamePhase == 30 and challenge == "navigation"):
+    if (refboxGamePhase == 30 and challenge == "navigation" and challengeFlag):
         if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
             startNavigation()
         
