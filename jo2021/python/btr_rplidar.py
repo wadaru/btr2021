@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #!/usr/bin/python
 
-START_ANGLE = -90
-END_ANGLE = 90
+START_ANGLE = -180 # -90
+END_ANGLE = 0 # 90
 THRESHOLD_ANGLE = 20
 
 import rospy
@@ -19,7 +19,7 @@ def scanDistance(deg):
 #
 def polarToPoint(distance, angle):
   point = Point()
-  radian = math.radians(angle)
+  radian = math.radians(angle + START_ANGLE)
   point.x = distance * math.cos(radian)
   point.y = distance * math.sin(radian)
   point.z = 0
@@ -57,8 +57,8 @@ def findEdge(startAngle, angleStep):
 #
 def calcPoint():
   global centerPoint, closePoint, leftPoint, rightPoint
-  minDistance = scanDistance(0)
-  minAngle = 0
+  minDistance = scanDistance((START_ANGLE + END_ANGLE) / 2)
+  minAngle = (START_ANGLE + END_ANGLE) / 2
   centerPoint = polarToPoint(minDistance, minAngle)
 
   for i in range(START_ANGLE, END_ANGLE):
@@ -69,8 +69,10 @@ def calcPoint():
   closePoint = polarToPoint(minDistance, minAngle)
 
   # find the left edge and right edge
-  leftPoint = findEdge(minAngle - 1, -1)
-  rightPoint = findEdge(minAngle + 1, 1)
+  # leftPoint = findEdge(minAngle - 1, -1)
+  # rightPoint = findEdge(minAngle + 1, 1)
+  leftPoint  = findEdge(minAngle + 1,  1)
+  rightPoint = findEdge(minAngle - 1, -1)
 
 #
 def laserScan(data):
@@ -102,8 +104,6 @@ def btrScanStop(self):
 #
 if __name__ == '__main__':
   # args = sys.argv
-  # if (len(args) == 1):
-  #   challenge = args[1]
 
   scanFlag = False
   centerPoint = Point()
