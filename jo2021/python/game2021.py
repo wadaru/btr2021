@@ -36,6 +36,23 @@ from rcll_ros_msgs.msg import BeaconSignal, ExplorationInfo, \
 from rcll_ros_msgs.srv import SendBeaconSignal, SendMachineReport, \
                               SendMachineReportBTR, SendPrepareMachine
 
+zoneX = { "S11" :  500, "S21" : 1500, "S31" : 2500, "S41" : 3500, "S51" : 4500,
+          "S12" :  500, "S22" : 1500, "S32" : 2500, "S42" : 3500, "S52" : 4500,
+          "S13" :  500, "S23" : 1500, "S33" : 2500, "S43" : 3500, "S53" : 4500,
+          "S14" :  500, "S24" : 1500, "S34" : 2500, "S44" : 3500, "S54" : 4500,
+          "S15" :  500, "S25" : 1500, "S35" : 2500, "S45" : 3500, "S55" : 4500 }
+zoneY = { "S11" :  500, "S21" :  500, "S31" :  500, "S41" :  500, "S51" :  500,
+          "S12" : 1500, "S22" : 1500, "S32" : 1500, "S42" : 1500, "S52" : 1500,
+          "S13" : 2500, "S23" : 2500, "S33" : 2500, "S43" : 2500, "S53" : 2500,
+          "S14" : 3500, "S24" : 3500, "S34" : 3500, "S44" : 3500, "S54" : 3500,
+          "S15" : 4500, "S25" : 4500, "S35" : 4500, "S45" : 4500, "S55" : 4500 }
+inputX = { 0: -1000, 45: -500, 90:     0, 135:  500, 180: 1000, 225:  500, 270:     0, 315: -500, 360: -1000}
+inputY = { 0:     0, 45: -500, 90: -1000, 135: -500, 180:    0, 225:  500, 270:  1000, 315:  500, 360:     0}
+outputX = {  0: inputX[180],  45: inputX[225],  90: inputX[270], 135: inputX[315],
+           180: inputX[  0], 225: inputX[ 45], 270: inputX[ 90], 315: inputX[135]}
+outputY = {  0: inputY[180],  45: inputY[225],  90: inputY[270], 135: inputY[315],
+           180: inputY[  0], 225: inputY[ 45], 270: inputY[ 90], 315: inputY[135]}
+
 def setOdometry(data):
     odometry = SetOdometry()
     pose = Pose2D()
@@ -463,7 +480,11 @@ if __name__ == '__main__':
       pose.x = startX[robotNum - 1]
       pose.y = startY[robotNum - 1]
       pose.theta = startTheta[robotNum - 1]
-      print(pose.x, pose.y, pose.theta)
+  if (challenge == "driving" or challenge == "positioning"):
+      pose.x = zoneX["S31"]
+      pose.y = zoneY["S31"]
+      pose.theta = 90
+  print(pose.x, pose.y, pose.theta)
   setOdometry(pose)
 
   print(challenge)
@@ -473,19 +494,66 @@ if __name__ == '__main__':
     sendBeacon()
     print("sendBeacon")
 
-    if (challenge == "test" and challengeFlag):
-        print("startGraspingTest")
-        startGrasping()
-        # goToOutputVelt()
+    if (challenge == "driving" and challengeFlag):
+        print("startDriving for JapanOpen2020")
+        targetZone =  ["S31", "S21", "S22", "S22", "S23", "S43", "S43", "S23", "S21", "S31"]
+        #                          Target1               Target2
+        targetAngle = [  180,    90,    45,    90,     0,   180,   180,   270,     0,    90] 
+        sleepTime   = [    0,     0,     5,     0,     0,     5,     0,     0,     0,     1]
+        for number in range(len(targetZone)):
+            print(targetZone[number])
+            x = zoneX[targetZone[number]]
+            y = zoneY[targetZone[number]]
+            theta = targetAngle[number]
+            goToPoint(x, y, theta)
+            time.sleep(sleepTime[number])
+
         challengeFlag = False
 
-    if (challenge == "test2" and challengeFlag):
-        if (refboxMachineInfoFlag and refboxNavigationRoutesFlag):
-            startNavigation()
-        challengeFlag = False
+    if (challenge == "positioning" and challengeFlag):
+        print("startPositioning for JapanOpen2020")
+        #
+        # MPSZone, MPSAngle, firstSide, turn
+        #
+        MPSZone = "S44" # Input !!!
+        MPSAngle = 90  # Input !!!
+        firstSide = "input"
+        turn = "clock"
+        if (firstSide == "input"):
+            MPSx = zoneX[MPSZone] + inputX[MPSAngle]
+            MPSy = zoneY[MPSZone] + inputY[MPSAngle]
+            theta = MPSAngle
+        else:
+            MPSx = zoneX[MPSZone] + outputX[MPSAngle]
+            MPSy = zoneY[MPSZone] + outputY[MPSAngle]
+            theta = MPSAngle + 180
+        
+        goToPoint(MPSx, MPSy, theta)
+        goToMPSCenter(340)
+        if (firstSide == "input"):
+            time.sleep(10)
 
-    if (challenge == "test3" and challengeFlag):
-        goToOutputVelt()
+        if (turn == "clock"):
+            turnClockwise()
+        else:
+            turnCounterClockwise()
+        goToMPSCenter(340)
+        time.sleep(10)
+        
+        if (turn == "clock"):
+            turnCounterClockwise()
+        else:
+            turnClockwise()
+        if (firstSide == "output"):
+            goToMPSCenter(340) 
+            time.sleep(10)
+        
+        theta = 270
+        goToPoint(MPSx, MPSy, theta)
+        x = zoneX["S31"]
+        y = zoneY["S31"]
+        theta = 90
+        goToPoint(x, y, theta)
         challengeFlag = False
 
     if (refboxGamePhase == 30 and challenge == "grasping" and challengeFlag):

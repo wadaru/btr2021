@@ -74,7 +74,8 @@ char IPSend[32], IPRecv[32];
 int yes = 1;
 struct sockaddr_in addrSend, addrRecv;
 unsigned char buf[256];
-const int offsetAngleDefault = -90; //  180;
+# const int offsetAngleDefault = -90; //  180;
+const int offsetAngleDefault = 0;
 int offsetAngle;
 
 const int maxX = 500;
