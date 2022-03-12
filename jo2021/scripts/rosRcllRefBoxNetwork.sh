@@ -2,7 +2,7 @@
 # Team: BabyTigers, Color: CYAN, Robot Number: 1
 # IP=192.168.255.255
 # IP=172.26.255.255
-IP=172.26.102.255
+IP=172.26.1.255
 ROBOT=`hostname`
 NUMS=3
 NUM=`echo ${ROBOT##*["-"]}`
